@@ -1,0 +1,8 @@
+{
+  "envName": "behnam",
+  "account": "057260886102",
+  "region": "us-east-1",
+  "apiDomainCertificateArn": "arn:aws:acm:us-east-1:057260886102:certificate/685e279a-55a8-4ae5-a1f0-f22732c421b3",
+  "rootDomain": "app.orbitstellar.com",
+  "subdomain": "api"
+}
