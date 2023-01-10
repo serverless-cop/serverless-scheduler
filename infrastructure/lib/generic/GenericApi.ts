@@ -19,6 +19,7 @@ import {Authorizer} from "aws-cdk-lib/aws-apigateway/lib/authorizer";
 import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 import {ARecord, HostedZone, RecordTarget} from "aws-cdk-lib/aws-route53";
 import {ApiGateway} from "aws-cdk-lib/aws-route53-targets";
+import {aws_apigateway} from "aws-cdk-lib";
 
 export interface Methodprops {
     functionName: string
@@ -36,7 +37,7 @@ export interface AuthorizerProps {
     id: string
     authorizerName: string
     identitySource: string
-    cognitoUserPools: [UserPool]
+    userPoolArn: string
 }
 
 export abstract class GenericApi extends Construct {
@@ -50,6 +51,10 @@ export abstract class GenericApi extends Construct {
     protected constructor(scope: Construct, id: string, props?: cdk.StackProps){
         super(scope, id);
         this.api = new RestApi(this, id, {
+            restApiName:'schedulerApi',
+            deployOptions: {
+                stageName: 'prod'
+            },
             defaultCorsPreflightOptions: {
                 allowOrigins: Cors.ALL_ORIGINS,
                 allowMethods: Cors.ALL_METHODS // this is also the default
@@ -57,23 +62,30 @@ export abstract class GenericApi extends Construct {
     }
 
     protected initializeDomainName(props: any){
-        const cert = Certificate.fromCertificateArn(this,
-            'certificateId',
-            props.certificateArn);
-        this.api.addDomainName(props.domainNameId, {
-            domainName: [props.subdomain, props.rootDomain].join('.'),
-            certificate: cert
-        });
-        this.api.root.addMethod('ANY');
 
-        const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
-            domainName: props.rootDomain
-        });
-        new ARecord(this, props.ARecordId, {
-            zone: hostedZone,
-            recordName: props.subdomain,
-            target: RecordTarget.fromAlias(new ApiGateway(this.api)),
-        });
+        const domainName = aws_apigateway.DomainName.fromDomainNameAttributes(
+            this, 'domainNameId', {
+                domainName: [props.subdomain, props.rootDomain].join('.'),
+                domainNameAliasHostedZoneId: "",
+                domainNameAliasTarget: ""
+            })
+
+        // const domainName = DomainName.fromDomainNameAttributes(this,
+        //     `${envName}-${appName}-${YOUR_DOMAIN_NAME}`, {
+        //         domainName: `${YOUR_DOMAIN_NAME}`,
+        //         domainNameAliasTarget: `${domainNameAliasTarget}`,       // GET from Route 53- I would prefer having this property as optional
+        //         domainNameAliasHostedZoneId: `${domainNameAliasHostedZoneId}` // GET from Route 53- I would prefer having this property as optional
+        //     });
+
+        //Used in custom domain
+        const pathMapping = new BasePathMapping(this,
+            'scheduler-mapping-id', {
+                basePath: 'scheduler',
+                domainName: domainName,
+                restApi: this.api
+            });
+
+        // this.api.root.addMethod('ANY');
     }
 
     protected addMethod(props: Methodprops): NodejsFunction{

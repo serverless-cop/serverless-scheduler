@@ -230,6 +230,15 @@
     "@aws-cdk/core" "1.182.0"
     constructs "^3.3.69"
 
+"@aws-cdk/aws-events@^1.187.0":
+  version "1.187.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-events/-/aws-events-1.187.0.tgz#83102d4d28faa2eeb9fe54a91f8ee01d22790927"
+  integrity sha512-TFprrVzxR5Rq0NBSvXZT+3WOsuFAvA1TIralIGhmOHZjiVHV/6vCkXkh5VQg7mkD6tSmgpPACJOlwYdj7Q9ygg==
+  dependencies:
+    "@aws-cdk/aws-iam" "1.187.0"
+    "@aws-cdk/core" "1.187.0"
+    constructs "^3.3.69"
+
 "@aws-cdk/aws-iam@1.182.0":
   version "1.182.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-iam/-/aws-iam-1.182.0.tgz#d5f4e7503da9bdbe37b2f7ef37c512fdd055024c"
@@ -238,6 +247,16 @@
     "@aws-cdk/core" "1.182.0"
     "@aws-cdk/cx-api" "1.182.0"
     "@aws-cdk/region-info" "1.182.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-iam@1.187.0":
+  version "1.187.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-iam/-/aws-iam-1.187.0.tgz#d3f047665d467fa5f4e828dc68ae9002ed1ff2fe"
+  integrity sha512-qrxmcMAGu3rXDsn7TGl174V8KyxeV1DUtbfAWvJF++p1mPLuCG2Fkynd5Qe5Vm0rGSOvlzLs+y44Q3s9N1u7RQ==
+  dependencies:
+    "@aws-cdk/core" "1.187.0"
+    "@aws-cdk/cx-api" "1.187.0"
+    "@aws-cdk/region-info" "1.187.0"
     constructs "^3.3.69"
 
 "@aws-cdk/aws-kms@1.182.0":
@@ -393,6 +412,14 @@
     jsonschema "^1.4.1"
     semver "^7.3.8"
 
+"@aws-cdk/cloud-assembly-schema@1.187.0":
+  version "1.187.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-1.187.0.tgz#d9dfdfb89bcd8c3ca7a15c83bdf2da61d325fd49"
+  integrity sha512-cvkeRFyoVJ0B2HSl2Vreq9FfX521e6oa68SBvva06123E9n2DadXFI1oum8V/ywSe3rViq+VqbUTfCYHpCHxUA==
+  dependencies:
+    jsonschema "^1.4.1"
+    semver "^7.3.8"
+
 "@aws-cdk/core@1.182.0":
   version "1.182.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/core/-/core-1.182.0.tgz#94accbd11a13d84d2d9214a7117dd96eb6cd855b"
@@ -405,6 +432,20 @@
     constructs "^3.3.69"
     fs-extra "^9.1.0"
     ignore "^5.2.0"
+    minimatch "^3.1.2"
+
+"@aws-cdk/core@1.187.0":
+  version "1.187.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/core/-/core-1.187.0.tgz#9962eb0971884b188fe746f8bff5f4a4e085e896"
+  integrity sha512-DG8tPTQdf0HQmlopiN6PiXDiDmHuwtTru+dRLKGShPXKpBGMJNF5GCIovd4UC6Co4XtiYLe0rDW7Su3G7vwEJA==
+  dependencies:
+    "@aws-cdk/cloud-assembly-schema" "1.187.0"
+    "@aws-cdk/cx-api" "1.187.0"
+    "@aws-cdk/region-info" "1.187.0"
+    "@balena/dockerignore" "^1.0.2"
+    constructs "^3.3.69"
+    fs-extra "^9.1.0"
+    ignore "^5.2.1"
     minimatch "^3.1.2"
 
 "@aws-cdk/custom-resources@1.182.0":
@@ -429,10 +470,23 @@
     "@aws-cdk/cloud-assembly-schema" "1.182.0"
     semver "^7.3.8"
 
+"@aws-cdk/cx-api@1.187.0":
+  version "1.187.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cx-api/-/cx-api-1.187.0.tgz#264f85e76fedfa1045f5ff91fa2aa801effb57d5"
+  integrity sha512-TCXJ2yDlkGEpeNPDIrEg9BI8Iq57EcTXnHOnAaK+ETMX09LRyVMyNej9g4/rzCVSojTiRVmdnA9gIZ98h8ZJ4g==
+  dependencies:
+    "@aws-cdk/cloud-assembly-schema" "1.187.0"
+    semver "^7.3.8"
+
 "@aws-cdk/region-info@1.182.0":
   version "1.182.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/region-info/-/region-info-1.182.0.tgz#00379cb87270426513e14475d90ba5e790e8ad2b"
   integrity sha512-H6KtVOHHsrlPO5sRs21iZmWGyFKziPyI552tHC7B7fOisxHpd+pnPLHJI/WC52wko5JizQ5wjbvR+r6cul9Diw==
+
+"@aws-cdk/region-info@1.187.0":
+  version "1.187.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/region-info/-/region-info-1.187.0.tgz#29d8b77fa1bdc2141bc063a065b2270da5f7ee00"
+  integrity sha512-DkrXbqeLZcR44oUvtygFfllnb/hFUgDfElSPQVQDaDX+f67P22ABoJ7XuTyXjx6PmE3jWHXZR5roQv6rGLETpA==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.18.6":
   version "7.18.6"
@@ -2069,6 +2123,11 @@ ignore@^5.2.0:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.1.tgz#c2b1f76cb999ede1502f3a226a9310fdfe88d46c"
   integrity sha512-d2qQLzTJ9WxQftPAuEQpSPmKqzxePjzVbpAVv62AQ64NTL+wR4JkrVqR/LqFsFEUsHDAiId52mJteHDFuDkElA==
+
+ignore@^5.2.1:
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
+  integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
 import-local@^3.0.2:
   version "3.1.0"

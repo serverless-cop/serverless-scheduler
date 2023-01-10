@@ -15,18 +15,23 @@ export function getEventHeaders(event: APIGatewayProxyEvent): any {
 }
 
 export function getSub(event: APIGatewayProxyEvent): string {
-    const headers = typeof event.headers == 'object' ? event.headers : JSON.parse(event.headers)
-    let jwt = ''
-    if(headers['Authorization']){
-        const authorizationHeader: string = headers['Authorization']
-        const stringArr = authorizationHeader.split(' ')
-        if(stringArr[0] === 'Bearer' || stringArr[0] === 'bearer')
-            jwt = stringArr[1]
-        else
-            jwt = stringArr[0]
+    try{
+        const headers = typeof event.headers == 'object' ? event.headers : JSON.parse(event.headers)
+        let jwt = ''
+        if(headers['Authorization']){
+            const authorizationHeader: string = headers['Authorization']
+            const stringArr = authorizationHeader.split(' ')
+            if(stringArr[0] === 'Bearer' || stringArr[0] === 'bearer')
+                jwt = stringArr[1]
+            else
+                jwt = stringArr[0]
+        }
+        let decoded: any = jwt_decode(jwt)
+        return decoded.sub ? decoded.sub : ''
+    } catch(e){
+        console.log('Cannot retrieve sub from JWT Token!')
+        return ''
     }
-    let decoded: any = jwt_decode(jwt)
-    return decoded.sub ? decoded.sub : ''
 }
 
 export function  getPathParameter(event: APIGatewayProxyEvent, parameter: string) {

@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@aws-cdk/aws-apigateway": "^1.182.0",
+    "@aws-cdk/aws-events": "^1.187.0",
     "@types/aws-lambda": "^8.10.109",
     "@types/uuid": "^9.0.0",
     "aws-cdk-lib": "2.51.1",

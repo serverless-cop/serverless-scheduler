@@ -1,12 +1,15 @@
 
 const configFile = require('./dev.json')
 interface Env {
-    env: string | undefined;
-    account: string | undefined;
-    region: string | undefined;
-    apiDomainCertificateArn: string | undefined;
-    rootDomain: string | undefined;
-    subdomain: string | undefined;
+    env: string | undefined
+    account: string | undefined
+    region: string | undefined
+    apiDomainCertificateArn: string | undefined
+    rootDomain: string | undefined
+    subdomain: string | undefined
+    userPoolArn: string | undefined
+    toRunFunctionArn: string | undefined
+    toRunFunctionInput: string | undefined
 }
 
 interface AppConfig {
@@ -16,6 +19,9 @@ interface AppConfig {
     apiDomainCertificateArn: string
     rootDomain: string
     subdomain: string
+    userPoolArn: string
+    toRunFunctionArn: string
+    toRunFunctionInput: string
 }
 
 const getConfig = (): Env => {
@@ -25,7 +31,10 @@ const getConfig = (): Env => {
         region: configFile.region ? configFile.region : 'us-east-1' ,
         apiDomainCertificateArn: configFile.apiDomainCertificateArn,
         rootDomain: configFile.rootDomain,
-        subdomain: configFile.subdomain
+        subdomain: configFile.subdomain,
+        userPoolArn: configFile.userPoolArn,
+        toRunFunctionArn: configFile.userPoolArn,
+        toRunFunctionInput: configFile.userPoolInput,
     };
 };
 

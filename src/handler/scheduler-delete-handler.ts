@@ -3,15 +3,9 @@ import {
     APIGatewayProxyResult,
     APIGatewayProxyEvent
 } from 'aws-lambda';
-import {Env} from "../lib/env";
-import {TodoService} from "../service/TodoService";
-import {getEventBody, getPathParameter, getSub} from "../lib/utils";
-import {TodoCreateParams, TodoDeleteParams} from "../service/types";
-
-const table = Env.get('TODO_TABLE')
-const todoService = new TodoService({
-    table: table
-})
+import {SchedulerService} from "../service/SchedulerService";
+import {getPathParameter, getSub} from "../lib/utils";
+const schedulerService = new SchedulerService({})
 
 export async function handler(event: APIGatewayProxyEvent, context: Context):
     Promise<APIGatewayProxyResult> {
@@ -26,12 +20,10 @@ export async function handler(event: APIGatewayProxyEvent, context: Context):
     }
     try {
         const id = getPathParameter(event, 'id')
-        const sub = getSub(event)
-        const todo = await todoService.delete({
-            id: id,
-            userId: sub,
+        const rule = await schedulerService.delete({
+            ruleName: id
         })
-        result.body = JSON.stringify(todo)
+        result.body = JSON.stringify(rule)
     } catch (error) {
         console.error(error.message)
         result.statusCode = 500

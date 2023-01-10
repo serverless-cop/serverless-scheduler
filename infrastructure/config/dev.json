@@ -4,5 +4,8 @@
   "region": "us-east-1",
   "apiDomainCertificateArn": "arn:aws:acm:us-east-1:057260886102:certificate/685e279a-55a8-4ae5-a1f0-f22732c421b3",
   "rootDomain": "app.orbitstellar.com",
-  "subdomain": "api"
+  "subdomain": "api",
+  "userPoolArn": "arn:aws:cognito-idp:us-east-1:057260886102:userpool/us-east-1_tXgN2ueGd",
+  "toRunFunctionArn": "arn:aws:lambda:us-east-1:057260886102:function:dev-dev-todo-asnyc-process",
+  "userPoolInput": "{\"foo\": \"bar\"}"
 }

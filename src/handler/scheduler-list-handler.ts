@@ -3,13 +3,10 @@ import {
     APIGatewayProxyResult,
     APIGatewayProxyEvent
 } from 'aws-lambda';
-import {Env} from "../lib/env";
-import {TodoService} from "../service/TodoService";
-import {getPathParameter, getQueryString, getSub} from "../lib/utils";
+import {SchedulerService} from "../service/SchedulerService";
+import {getSub} from "../lib/utils";
+const schedulerService = new SchedulerService({
 
-const table = Env.get('TODO_TABLE')
-const todoService = new TodoService({
-    table: table
 })
 
 export async function handler(event: APIGatewayProxyEvent, context: Context):
@@ -24,9 +21,9 @@ export async function handler(event: APIGatewayProxyEvent, context: Context):
         },
         body: ''
     }
-    const userId = getSub(event)
-    const todo = await todoService.list(userId)
+    const sub = getSub(event)
+    const ruleList = await schedulerService.list()
 
-    result.body = JSON.stringify(todo)
+    result.body = JSON.stringify(ruleList)
     return result
 }

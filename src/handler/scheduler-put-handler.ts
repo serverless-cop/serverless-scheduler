@@ -3,15 +3,12 @@ import {
     APIGatewayProxyResult,
     APIGatewayProxyEvent
 } from 'aws-lambda';
-import {getEventBody, getPathParameter, getSub} from "../lib/utils";
+import {getEventBody, getSub} from "../lib/utils";
 import {Env} from "../lib/env";
-import {TodoService} from "../service/TodoService";
-import {TodoCreateParams} from "../service/types";
-
-const table = Env.get('TODO_TABLE')
-const todoService = new TodoService({
-    table: table
-})
+import {SchedulerService} from "../service/SchedulerService";
+const functionArn = Env.get('FUNCTION_ARN')
+const functionInput = Env.get('FUNCTION_INPUT')
+const schedulerService = new SchedulerService({})
 
 export async function handler(event: APIGatewayProxyEvent, context: Context):
     Promise<APIGatewayProxyResult> {
@@ -25,11 +22,16 @@ export async function handler(event: APIGatewayProxyEvent, context: Context):
         body: 'Empty!'
     }
     try {
-        const item = getEventBody(event) as TodoCreateParams;
-        const sub = getSub(event)
-        item.userId = sub
-        const todo = await todoService.create(item)
-        result.body = JSON.stringify(todo)
+        const item = getEventBody(event)
+
+        const rule = await schedulerService.put({
+            ScheduleExpression: item.scheduleExpression,
+            targetLambdaArn: item.functionArn,
+            input: item.functionInput,
+            roleArn: item.roleArn
+        })
+
+        result.body = JSON.stringify(rule)
     } catch (error) {
         result.statusCode = 500
         result.body = error.message
