@@ -16,7 +16,7 @@ export async function handler(event: APIGatewayProxyEvent, context: Context):
             'Access-Control-Allow-Headers': '*',
             'Access-Control-Allow-Methods': '*'
         },
-        body: 'Hello From Todo Edit Api!'
+        body: 'Hello!'
     }
     try {
         const id = getPathParameter(event, 'id')
@@ -25,7 +25,6 @@ export async function handler(event: APIGatewayProxyEvent, context: Context):
         })
         result.body = JSON.stringify(rule)
     } catch (error) {
-        console.error(error.message)
         result.statusCode = 500
         result.body = error.message
     }

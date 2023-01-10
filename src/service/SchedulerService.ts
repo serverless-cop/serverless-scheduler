@@ -4,9 +4,9 @@ import {EventRuleDeleteParams, EventRuleGetParams, EventRulePutParams} from "./t
 import EventBridge, {
     DeleteRuleRequest,
     DescribeRuleRequest,
-    PutRuleRequest,
-    RuleName
+    PutRuleRequest
 } from "aws-sdk/clients/eventbridge";
+import {Lambda} from "aws-sdk";
 
 
 
@@ -18,6 +18,7 @@ export class SchedulerService {
 
     private props: SchedulerServiceProps
     private eventBridge = new EventBridge()
+    private lambda = new Lambda()
 
     public constructor(props: SchedulerServiceProps){
         this.props = props
@@ -46,30 +47,30 @@ export class SchedulerService {
         const ruleParams: PutRuleRequest = {
             Name: ruleName,
             ScheduleExpression: params.ScheduleExpression,
-            RoleArn: params.roleArn,
             State: 'ENABLED',
         }
         const rule = await this.eventBridge.putRule(ruleParams).promise()
+
+        const permissionParams = {
+            Action: 'lambda:InvokeFunction',
+            FunctionName: params.targetLambdaArn,
+            Principal: 'events.amazonaws.com',
+            StatementId: ruleName+'-access-statement',
+            SourceArn: rule.RuleArn,
+        };
+        await this.lambda.addPermission(permissionParams).promise();
+
         const targetParams = {
             Rule: ruleName,
             Targets: [
                 {
                     Arn: params.targetLambdaArn,
                     Id: ruleName + '-target',
+                    Input: params.input,
                 }
             ]
         }
         const target = await this.eventBridge.putTargets(targetParams).promise()
-
-        // const permissionParams = {
-        //     Action: 'lambda:InvokeFunction',
-        //     FunctionName: 'LambdaB',
-        //     Principal: 'events.amazonaws.com',
-        //     StatementId: ruleName,
-        //     SourceArn: rule.RuleArn,
-        // };
-        //
-        // await Lambda.addPermission(permissionParams).promise();
 
         return {
             RuleResponse: rule,
@@ -78,12 +79,17 @@ export class SchedulerService {
     }
 
     async delete(params: EventRuleDeleteParams): Promise<any> {
-        const ruleParams: DeleteRuleRequest = {
-            Name: params.ruleName,
-            EventBusName: params.eventBusName
+        try{
+            const ruleParams: DeleteRuleRequest = {
+                Name: params.ruleName,
+                // EventBusName: params.eventBusName
+            }
+            console.log(ruleParams)
+            const response = await this.eventBridge.deleteRule(ruleParams)
+            return response
+        } catch(error){
+            throw error
         }
-        const response = await this.eventBridge.deleteRule(ruleParams)
-        return response
     }
 
 }

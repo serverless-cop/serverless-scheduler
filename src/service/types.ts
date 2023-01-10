@@ -13,7 +13,7 @@ export interface EventRulePutParams {
     ScheduleExpression: string
     targetLambdaArn: string
     input: string
-    roleArn: string
+    // roleArn: string
 }
 
 export type EventRuleDeleteParams = EventRuleGetParams

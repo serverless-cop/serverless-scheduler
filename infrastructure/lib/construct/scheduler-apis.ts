@@ -1,12 +1,10 @@
 import {Construct} from "constructs";
 import {AuthorizerProps, GenericApi} from "../generic/GenericApi";
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
-import { putSchedulerSchema } from "./scheduler-schema";
 import {CognitoUserPoolsAuthorizer} from "aws-cdk-lib/aws-apigateway";
-import {AuthorizationType} from "@aws-cdk/aws-apigateway";
 import config from "../../config/config";
 import {UserPool} from "aws-cdk-lib/aws-cognito";
-import {CfnEventBusPolicy, EventBus} from "aws-cdk-lib/aws-events";
+import {Effect, PolicyStatement} from "aws-cdk-lib/aws-iam";
 
 
 export interface SchedulerApiProps {
@@ -51,7 +49,7 @@ export class SchedulerApis extends GenericApi {
 
             },
             validateRequestBody: false,
-            authorizationType: AuthorizationType.COGNITO,
+            // authorizationType: AuthorizationType.COGNITO,
             // authorizer: authorizer
         })
 
@@ -64,22 +62,21 @@ export class SchedulerApis extends GenericApi {
 
             },
             validateRequestBody: false,
-            authorizationType: AuthorizationType.COGNITO,
+            // authorizationType: AuthorizationType.COGNITO,
             // authorizer: authorizer
         })
 
         this.putApi = this.addMethod({
-            functionName: 'scheduler-post',
+            functionName: 'scheduler-put',
             handlerName: 'scheduler-put-handler.ts',
-            verb: 'POST',
+            verb: 'PUT',
             resource: schedulesApiResource,
             environment: {
-                FUNCTION_ARN: config.toRunFunctionArn,
-                FUNCTION_INPUT: config.toRunFunctionInput
+
             },
             validateRequestBody: true,
-            bodySchema: putSchedulerSchema,
-            authorizationType: AuthorizationType.COGNITO,
+            // bodySchema: putSchedulerSchema,
+            // authorizationType: AuthorizationType.COGNITO,
             // authorizer: authorizer
         })
 
@@ -92,15 +89,26 @@ export class SchedulerApis extends GenericApi {
 
             },
             validateRequestBody: false,
-            authorizationType: AuthorizationType.COGNITO,
+            // authorizationType: AuthorizationType.COGNITO,
             // authorizer: authorizer
         })
 
-        // const bus = EventBus.fromEventBusName(this, 'defaultEB', 'default')
+        const eventbusListPolicy = new PolicyStatement({
+            actions: ['events:*'],
+            resources: [`arn:aws:events:${config.region}:${config.account}:rule/*`],
+            effect: Effect.ALLOW
+        })
 
-        // this.listApi.addPermission("eventBridgePermissionId", {
-        //     principal: '',
-        // })
+        const lambdaPermissionRolePolicy = new PolicyStatement({
+            actions: ['lambda:AddPermission'],
+            resources: ['*'],
+            effect: Effect.ALLOW
+        })
+
+        this.listApi.addToRolePolicy(eventbusListPolicy)
+        this.getApi.addToRolePolicy(eventbusListPolicy)
+        this.putApi.addToRolePolicy(eventbusListPolicy)
+        this.putApi.addToRolePolicy(lambdaPermissionRolePolicy)
     }
 
     protected createAuthorizer(props: AuthorizerProps): CognitoUserPoolsAuthorizer{
