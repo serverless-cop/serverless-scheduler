@@ -62,7 +62,6 @@ export abstract class GenericApi extends Construct {
     }
 
     protected initializeDomainName(props: any){
-
         const domainName = aws_apigateway.DomainName.fromDomainNameAttributes(
             this, 'domainNameId', {
                 domainName: [props.subdomain, props.rootDomain].join('.'),
@@ -70,22 +69,12 @@ export abstract class GenericApi extends Construct {
                 domainNameAliasTarget: ""
             })
 
-        // const domainName = DomainName.fromDomainNameAttributes(this,
-        //     `${envName}-${appName}-${YOUR_DOMAIN_NAME}`, {
-        //         domainName: `${YOUR_DOMAIN_NAME}`,
-        //         domainNameAliasTarget: `${domainNameAliasTarget}`,       // GET from Route 53- I would prefer having this property as optional
-        //         domainNameAliasHostedZoneId: `${domainNameAliasHostedZoneId}` // GET from Route 53- I would prefer having this property as optional
-        //     });
-
-        //Used in custom domain
         const pathMapping = new BasePathMapping(this,
             'scheduler-mapping-id', {
                 basePath: 'scheduler',
                 domainName: domainName,
                 restApi: this.api
             });
-
-        // this.api.root.addMethod('ANY');
     }
 
     protected addMethod(props: Methodprops): NodejsFunction{
